@@ -104,7 +104,7 @@ for i in range(1,size):
     #     row+=1
 size=size-1
 row = 3
-for k in range(0,size+1):
+for k in range(1,size+1):
     worksheet.write(row+2, k, avgcat1/size,format)
     worksheet.write(row+5, k, avgcat2/size,format)
     worksheet.write(row+8, k, avgcat3/size,format)
