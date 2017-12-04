@@ -19,7 +19,18 @@ def wordAvgLength( str ):
     #
     # sentence=""
     words = sentence.split()
-    average = sum(len(word) for word in words) / len(words)
+    average=0
+    p=0
+    pp=0
+    for word in words:
+        if len(word) > 1:
+            average = average + len(word)
+        else:
+            p+=1
+    print p
+    print len(words)              
+    print sum(len(i) > 1 for i in words)
+    average = average / sum(len(i) > 1 for i in words)
     print average
     return average
 
@@ -28,6 +39,7 @@ sentence=""
 avg=0
 avgAvg=0
 for i in range(1, size):
+    print i
     f = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
     sentence = f.read()
     sentence = unicode(sentence, "utf-8")

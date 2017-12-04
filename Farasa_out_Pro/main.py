@@ -76,15 +76,18 @@ for t in range(2,size+1):
     row=4
 pos =[]
 avgVs=[0]*16
+fil=[0]*16
+for fi in range(0,len(fil)):
+    fil[fi] = open('/Users/diasaleh/Desktop/Farasa_POS_Type_' + str(fi) + ".txt", 'w')
 l=0
 o = open('/Users/diasaleh/Desktop/Clean'+str(sys.argv[4])+'POS.txt',"w")
 for i in range(1,size):
     f = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
     sentence = f.read()
+    sentence = unicode(sentence, "utf-8")
     x = sentence.split()
-
-    words[i] += len(sentence.split())
-    print len(sentence.split())
+    words[i] += sum(len(xi) > 1 for xi in x)
+    print words[i]
     print sys.argv[2]+str(i)+""
     with open('/Users/diasaleh/Desktop/Clean'+str(sys.argv[4])+'_Farasa/F2_'+str(i)+'.txt', "r") as ff:
         for line in ff:
@@ -92,34 +95,49 @@ for i in range(1,size):
             if len(x) > 2:
                 if x[1] == "V":
                     V[i]+=  1
+                    fil[0].write(line)
                 elif x[1] == "PREP":
+                    fil[1].write(line)
                     PREP[i] = PREP[i] + 1
                 elif x[1] == "PART":
                     PART[i] = PART[i] + 1
+                    fil[2].write(line)
                 elif x[1] == "DET":
                     DET[i] = DET[i] + 1
+                    fil[3].write(line)
                 elif x[1] == "NOUN":
                     NOUN[i] = NOUN[i] + 1
+                    fil[4].write(line)
                 elif x[1] == "NSUFF":
                     NSUFF[i] = NSUFF[i] + 1
+                    fil[5].write(line)
                 elif x[1] == "PRON":
                     PRON[i] = PRON[i] + 1
+                    fil[6].write(line)
                 elif x[1] == "NUM":
                     NUM[i] = NUM[i] + 1
+                    fil[7].write(line)
                 elif x[1] == "CONJ":
                     CONJ[i] = CONJ[i] + 1
+                    fil[8].write(line)
                 elif x[1] == "ADJ":
                     ADJ[i] = ADJ[i] + 1
+                    fil[9].write(line)
                 elif x[1] == "FUT_PART":
                     FUT_PART[i] = FUT_PART[i] + 1
+                    fil[10].write(line)
                 elif x[1] == "CASE":
                     CASE[i] = CASE[i] + 1
+                    fil[11].write(line)
                 elif x[1] == "ADV":
                     ADV[i] = ADV[i] + 1
+                    fil[12].write(line)
                 elif x[1] == "ABBREV":
                     ABBREV[i] = ABBREV[i] + 1
+                    fil[13].write(line)
                 elif x[1] == "FOREIGN":
                     FOREIGN[i] = FOREIGN[i] + 1
+                    fil[14].write(line)
                 else:
                     print line
 
@@ -176,7 +194,10 @@ for i in range(1,size):
 
 o.write("allwords = "+ str(allwords)+"\n")
 o.close()
+for fi in range(0,len(fil)):
+    fil[fi].close()
 row=7
+
 size=size-1
 for k in range(0,len(avgVs)):
     for i in range(2,size+2):
