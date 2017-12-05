@@ -4,11 +4,11 @@ import xlrd
 import xlsxwriter
 from collections import Counter
 from collections import defaultdict
-
-size=101
+import sys
+size=int(sys.argv[3])+1
 book = xlrd.open_workbook('/Users/diasaleh/Desktop/GP/neg.xlsx')
 sheet = book.sheet_by_name('Sheet1')
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/1000allNegCatNew.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'allNegCatNew.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
@@ -29,9 +29,9 @@ for i in range(0,sheet.ncols):
             j+=1
     j=0
 print neg
-for i in range(1,size+1):
-    f = open("/Users/diasaleh/Desktop/new/1000/t ("+str(i)+").txt", "r")
-    print "/Users/diasaleh/Desktop/GP/1000/TN"+str(i)+".txt"
+for i in range(1,size):
+    f = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
+    print sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt"
     sentence = f.read()
     x = sentence.split()
     x = map(str.strip, x)
