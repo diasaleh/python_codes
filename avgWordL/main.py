@@ -2,8 +2,10 @@
 from __future__ import division
 import sys
 import xlsxwriter
+import re
+tashkeel_patt = ur"[\u0617-\u061A\u064B-\u0652]+"
 
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'avgWordL.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'avgWordL.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
@@ -30,7 +32,8 @@ def wordAvgLength( str ):
     print p
     print len(words)              
     print sum(len(i) > 1 for i in words)
-    average = average / sum(len(i) > 1 for i in words)
+    if  sum(len(i) > 1 for i in words) >0:
+        average = average / sum(len(i) > 1 for i in words)
     print average
     return average
 
@@ -43,6 +46,7 @@ for i in range(1, size):
     f = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
     sentence = f.read()
     sentence = unicode(sentence, "utf-8")
+    sentence = re.sub(tashkeel_patt,u"",sentence)
     avg=wordAvgLength(sentence)
     worksheet.write(row, col, str(i) , format)
     worksheet.write(row + 1, col, avg, format)

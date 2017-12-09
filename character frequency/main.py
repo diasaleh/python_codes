@@ -14,7 +14,7 @@ size=int(sys.argv[3])+1
 import collections
 avgcat1=0
 avgcat2=0
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'all_Mjhor_Mhmos_details.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'all_Mjhor_Mhmos_details.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()

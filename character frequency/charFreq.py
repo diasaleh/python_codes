@@ -11,7 +11,7 @@ j=0
 size=int(sys.argv[3])+1
 avgcat1=0
 avgcat2=0
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'RowCharFeq.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'RowCharFeq.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()

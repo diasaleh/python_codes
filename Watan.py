@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: cp1256 -*-
 import sys
 import codecs

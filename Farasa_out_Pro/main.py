@@ -4,6 +4,8 @@ import re
 import xlsxwriter
 from math import sqrt
 import sys
+tashkeel_patt = ur"[\u0617-\u061A\u064B-\u0652]+"
+
 size=int(sys.argv[3])+1
 V=[0] * size
 PREP=[0]* size
@@ -28,7 +30,7 @@ col = 2
 
 allwords=0
 j=0
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/Clean'+str(sys.argv[4])+'POS.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'POS.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
@@ -77,19 +79,23 @@ for t in range(2,size+1):
 pos =[]
 avgVs=[0]*16
 fil=[0]*16
-for fi in range(0,len(fil)):
-    fil[fi] = open('/Users/diasaleh/Desktop/Farasa_POS_Type_' + str(fi) + ".txt", 'w')
+
 l=0
-o = open('/Users/diasaleh/Desktop/Clean'+str(sys.argv[4])+'POS.txt',"w")
+o = open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'POS.txt',"w")
+wordcf = open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'wordsCount.txt',"w")
 for i in range(1,size):
+    for fi in range(0,len(fil)):
+        fil[fi] = open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+'Farasa_details/' + 'Farasa_POS_Type_' +str(fi)+'_'+str(i) + ".txt", 'w')
     f = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
     sentence = f.read()
     sentence = unicode(sentence, "utf-8")
+    sentence = re.sub(tashkeel_patt,u"",sentence)
     x = sentence.split()
     words[i] += sum(len(xi) > 1 for xi in x)
     print words[i]
+    allwords += words[i]
     print sys.argv[2]+str(i)+""
-    with open('/Users/diasaleh/Desktop/Clean'+str(sys.argv[4])+'_Farasa/F2_'+str(i)+'.txt', "r") as ff:
+    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+'Farasa/'+(sys.argv[4])+'F2_'+str(i)+'.txt', "r") as ff:
         for line in ff:
             x = line.split("&")
             if len(x) > 2:
@@ -191,9 +197,11 @@ for i in range(1,size):
     pos=[]
     col = col + 1
     print col
-
-o.write("allwords = "+ str(allwords)+"\n")
+    for fi in range(0,len(fil)):
+        fil[fi].close()
+wordcf.write("allwords = "+ str(allwords)+"\n")
 o.close()
+wordcf.close()
 for fi in range(0,len(fil)):
     fil[fi].close()
 row=7

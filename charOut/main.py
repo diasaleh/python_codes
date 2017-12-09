@@ -2,8 +2,8 @@
 from __future__ import division
 import xlsxwriter
 import sys
-
-
+import re
+tashkeel_patt = ur"[\u0617-\u061A\u064B-\u0652]+"
 
 row = 3
 row2 = 3
@@ -18,14 +18,14 @@ avgcat3=0
 avgcat4=0
 avgcat5=0
 
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'all_charOut.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'all_charOut.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
 format.set_font_color('white')
 format.set_bg_color('green')
 format.set_font_size(16)
-
+unk={}
 def char_frequency(str1):
     dict = {}
     lett = 0
@@ -43,6 +43,7 @@ for i in range(1,size):
     f = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
     sentence = f.read()
     sentence = unicode(sentence, "utf-8")
+    sentence = re.sub(tashkeel_patt,u"",sentence)
     d,n=char_frequency(sentence)
     # d_view = [ (v,k) for k,v in d.iteritems() ]
     # d_view.sort(reverse=True)
@@ -65,9 +66,14 @@ for i in range(1,size):
             cat2 += float((v * 100) / (n * 1.0))
         elif k == "ب" or k == "م" or k == "و" or k == "ف":
             cat3 += float((v * 100) / (n * 1.0))
-        elif k == "و" or k == "ي" or k == "ا" or k == "ى":
+        elif k == "و" or k == "ي" or k == "ا" or k == "آ" or k == "ى":
             cat4 += float((v * 100) / (n * 1.0))
         else:
+            unkKeys = unk.keys()
+            if k in unkKeys:
+                unk[k] += 1
+            else:
+                unk[k] = 1
             cat5 += float((v * 100) / (n * 1.0))
     avgcat1 += cat1
     avgcat2+=cat2
@@ -79,6 +85,9 @@ for i in range(1,size):
     print "\nlesan: " + str(cat2)
     print "\nshefa: " + str(cat3)
     print "\njuff: " + str(cat4)
+    print "\nUnknown: " + str(cat5)
+    for ke in unk.keys():
+        print ke
     print "\n=============\n"
     worksheet.write(row, col, str(i) + " hulk",format)
     worksheet.write(row+1, col, cat1,format)

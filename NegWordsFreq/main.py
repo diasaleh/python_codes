@@ -8,7 +8,7 @@ import sys
 size=int(sys.argv[3])+1
 book = xlrd.open_workbook('/Users/diasaleh/Desktop/GP/neg.xlsx')
 sheet = book.sheet_by_name('Sheet1')
-workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'allNegCatNew.xlsx')
+workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'allNegCatNew.xlsx')
 worksheet = workbook.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
