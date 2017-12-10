@@ -18,7 +18,7 @@ allwords=0
 def createList():
     nsufff={}
     for i in range(1,size):
-        with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_6_'+str(i)+'.txt', "r") as f:
+        with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_1_'+str(i)+'.txt', "r") as f:
             for line in f:
                 x = line.split("&")
                 nsufff[x[0]]=0
@@ -45,19 +45,11 @@ m=0
 NSUFFall=createList()
 for i in range(1,size):
     nsuff = createList()
-    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_6_'+str(i)+'.txt', "r") as f:
+    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_1_'+str(i)+'.txt', "r") as f:
         for line in f:
             x = line.split("&")
             nsuff[x[0]]+=1
-    ff = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
-    sentence = ff.read()
-    sentence = unicode(sentence, "utf-8")
-    sentence = re.sub(tashkeel_patt,u"",sentence)
-    x = sentence.split()
-    words[i] += sum(len(xi) > 1 for xi in x)
-    print words[i]
-    allwords += words[i] 
-    ff.close()       
+    allPron = sum(nsuff.values())
     # nsuff.append("+ا")
     # nsuff.append("+ان")
     # nsuff.append("+ة")
@@ -73,16 +65,17 @@ for i in range(1,size):
     #     worksheet.write(roww + 1, col, 0, format)
     #     worksheet.write(roww + 2, col,0, format)
     #     roww+=4
+
     for key in sorted(nsuff):
         worksheet.write(roww, col, str(i) +" & " +key+ " & "+str(words[i]) , format2)
         worksheet.write(roww + 1, col, nsuff[key], format)      
-        worksheet.write(roww + 2, col, 100*nsuff[key]/ words[i], format)
-        NSUFFall[key] +=100*nsuff[key]/ words[i]
+        worksheet.write(roww + 2, col, 100*nsuff[key]/allPron, format)
+        NSUFFall[key] +=100*nsuff[key]/ allPron
         roww +=4
     roww = 1
     col +=1
     nsuff= {}
-
+    allPron=0
     print "======="
 size=size-1 
 roww =  4
