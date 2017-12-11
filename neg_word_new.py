@@ -25,10 +25,10 @@ format.set_bg_color('green')
 format.set_font_size(16)
 neg = defaultdict(list)
 avgNegCount = [0] * sheet.ncols
-print sheet.ncols
 col=1
 roww=1
 j=0
+cat=[0]*3
 negCount=[0]*sheet.ncols
 for i in range(0,sheet.ncols):
     for row in range(0, sheet.nrows):
@@ -36,7 +36,8 @@ for i in range(0,sheet.ncols):
             neg[i].append(sheet.cell_value(row, i))
             j+=1
     j=0
-print neg
+# print neg
+# print "\n ==============="
 NSUFFall=createList()
 for i in range(1,size):
     nsuff = createList()
@@ -45,15 +46,19 @@ for i in range(1,size):
             x = line.split("&")
             nsuff[x[0]]+=1
     allPron = sum(nsuff.values())
-
-    # print words
-    print neg[0][0]
-    for j in range(0,sheet.ncols):
-        for p in range(0,len(neg[j])):
-                # print neg[j][p]
-                # print x[k]
-                if neg[j][p] in nsuff:
-                     negCount[j]+=nsuff.get(neg[j][p])
+    # print neg[0][0]
+    
+            # print nsuff
+            # print x[k]
+            # print "111"
+    cat[0] += nsuff["غير"]
+    cat[0] += nsuff["خلا"]
+    cat[1] += nsuff["سواء"]
+    cat[1] += nsuff["سوى"]
+    cat[1] += nsuff["غير"]
+    cat[2] += nsuff["إلا"]
+    print cat        
+    negCount[j]+=nsuff["غير"]
     for j in range(0,sheet.ncols):
         avgNegCount[j]+=(negCount[j])
 
@@ -62,8 +67,11 @@ for i in range(1,size):
         worksheet.write(roww+1, col, negCount[j], format)
         if sum(negCount) !=0:
             worksheet.write(roww + 2, col, 100*negCount[j]/sum(negCount), format)
+        else:
+            worksheet.write(roww + 2, col, "zero", format)
         roww +=4
-    print negCount
+    # print negCount
+    # print "\n ==============="
 
     negCount = [0] * sheet.ncols
 
@@ -73,6 +81,9 @@ for i in range(1,size):
 roww = 4
 for j in range(0, sheet.ncols):
     for b in range(1,75):
-        worksheet.write(roww, b, 100*avgNegCount[j]/sum(avgNegCount), format)
+        if sum(avgNegCount) !=0:
+            worksheet.write(roww, b, 100*avgNegCount[j]/sum(avgNegCount), format)
+        else:
+            worksheet.write(roww,  b, "zero", format)
     roww += 4
 workbook.close()

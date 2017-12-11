@@ -27,8 +27,9 @@ digit_list = '٠١٢٣٤٥٦٧٨٩'
 regexx = ur'[\u0660-\u0669]+'
 subst = u" "
 t=""
-for i in range(1,101):
-	f=open("/Users/diasaleh/Desktop/1400/T"+str(i)+".txt","r")
+for i in range(1,477):
+	print i
+	f=open("/Users/diasaleh/Desktop/without/T"+str(i)+".txt","r")
 	text = f.read()
 	text = text.decode('cp1256')
 	text = regex.sub(ur'[\p{Latin}]', u' ', text)
