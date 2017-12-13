@@ -14,13 +14,18 @@ f = open('NB_100_1000_hindawi_D1500.pickle', 'wb')
 cat1="hindawi"
 cat2=1000
 cat3=100
-fn=7
+fn=9
 farasaFeat = [6,18,26,38,42,54]
+charOut = [7,10]
+
 book1_1 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+(cat1)+'D_shell_output/'+str(cat1)+'DPOS.xlsx')
 sheet1_1 = book1_1.sheet_by_name('Sheet1')
 
 book1_2 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+(cat1)+'D_shell_output/'+str(cat1)+'DavgWordL.xlsx')
 sheet1_2 = book1_2.sheet_by_name('Sheet1')
+
+book1_3 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+(cat1)+'D_shell_output/'+str(cat1)+'Dall_charOut.xlsx')
+sheet1_3 = book1_3.sheet_by_name('Sheet1')
 
 book2_1 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+str(cat2)+'D_shell_output/'+str(cat2)+'DPOS.xlsx')
 sheet2_1 = book2_1.sheet_by_name('Sheet1')
@@ -28,11 +33,17 @@ sheet2_1 = book2_1.sheet_by_name('Sheet1')
 book2_2 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+str(cat2)+'D_shell_output/'+str(cat2)+'DavgWordL.xlsx')
 sheet2_2 = book2_2.sheet_by_name('Sheet1')
 
+book2_3 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+str(cat2)+'D_shell_output/'+str(cat2)+'Dall_charOut.xlsx')
+sheet2_3 = book2_3.sheet_by_name('Sheet1')
+
 book3_2 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+str(cat3)+'D_shell_output/'+str(cat3)+'DavgWordL.xlsx')
 sheet3_2 = book3_2.sheet_by_name('Sheet1')
 
 book3_1 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+str(cat3)+'D_shell_output/'+str(cat3)+'DPOS.xlsx')
 sheet3_1 = book3_1.sheet_by_name('Sheet1')
+
+book3_3 = xlrd.open_workbook('/Users/diasaleh/Desktop/'+str(cat3)+'D_shell_output/'+str(cat3)+'Dall_charOut.xlsx')
+sheet3_3 = book3_3.sheet_by_name('Sheet1')
 
 size1 = sheet1_1.ncols
 size2 = sheet2_1.ncols
@@ -44,7 +55,6 @@ featuresCat3 = np.zeros(shape=(fn,size3-2))
 # print featuresCat1
 col=2
 row=0
-fo= open("/Users/diasaleh/Downloads/test.txt","w")
 i=0
 for col in range(1, size1-1):
 		# print sheet1_2.cell_value(4, col)
@@ -61,9 +71,18 @@ for row in range(1,len(farasaFeat)+1):
 		i+=1
 	i=0
 i=0
-
+for row in range(7,9):
+	print row
+	print charOut[row-7]
+	for col in range(1, size1-1):
+		print col
+		print sheet1_3.cell_value(charOut[row-7], col)
+		featuresCat1[row][i] = (float(sheet1_3.cell_value(charOut[row-7], col)))
+		i+=1
+	i=0
+i=0
+print featuresCat1
 row=0
-fo= open("/Users/diasaleh/Downloads/test.txt","w")
 for col in range(1, size2-1):
 		# print sheet.cell_value(farasaFeat[row], col)
 		featuresCat2[row][i] = (float(sheet2_2.cell_value(4, col)))
@@ -80,9 +99,18 @@ for row in range(1,len(farasaFeat)+1):
 		i+=1
 	i=0	
 i=0	
-
+for row in range(7,9):
+	print row
+	print charOut[row-7]
+	for col in range(1, size2-1):
+		print col
+		print sheet2_3.cell_value(charOut[row-7], col)
+		featuresCat2[row][i] = (float(sheet2_3.cell_value(charOut[row-7], col)))
+		i+=1
+	i=0
 row=0
-fo= open("/Users/diasaleh/Downloads/test.txt","w")
+i=0
+print featuresCat2
 for col in range(1, size3-1):
 		# print sheet.cell_value(farasaFeat[row], col)
 		featuresCat3[row][i] = (float(sheet3_2.cell_value(4, col)))
@@ -100,10 +128,20 @@ for row in range(1,len(farasaFeat)+1):
 	i=0	
 i=0	
 
-
-# # featureNew = feature.reshape(3,5)	
+i=0	
+for row in range(7,9):
+	print row
+	print charOut[row-7]
+	for col in range(1, size3-1):
+		print col
+		print sheet3_3.cell_value(charOut[row-7], col)
+		featuresCat3[row][i] = (float(sheet3_3.cell_value(charOut[row-7], col)))
+		i+=1
+	i=0
+print featuresCat3
+# featureNew = feature.reshape(3,5)	
 # print featuresCat1
-# # print len(featuresCat2[0])
+# print len(featuresCat2[0])
 # print (featuresCat2[0])
 xCat1=np.dstack((featuresCat1)).reshape(-1,fn)
 xCat2=np.dstack((featuresCat2)).reshape(-1,fn)
@@ -159,5 +197,5 @@ print(clf.predict(xCat3test))
 # print(clf.predict_proba(xCat3test))
 print(clf.score(xCat3test,np.repeat("100",len(xCat3test))))
 
-pickle.dump(clf, f)
-f.close()
+# pickle.dump(clf, f)
+# f.close()
