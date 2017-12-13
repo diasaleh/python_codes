@@ -17,9 +17,11 @@ avgcat2=0
 avgcat3=0
 avgcat4=0
 avgcat5=0
-
+col2=1
 workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'all_charOut.xlsx')
 worksheet = workbook.add_worksheet()
+workbook2 = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+'all_charOut_2.xlsx')
+worksheet2 = workbook2.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
 format.set_font_color('white')
@@ -89,18 +91,31 @@ for i in range(1,size):
     for ke in unk.keys():
         print ke
     print "\n=============\n"
-    worksheet.write(row, col, str(i) + " hulk",format)
-    worksheet.write(row+1, col, cat1,format)
+    if i < 16000:
+        worksheet.write(row, col, str(i) + " hulk",format)
+        worksheet.write(row+1, col, cat1,format)
 
-    worksheet.write(row+3, col, str(i) + " lesan", format)
-    worksheet.write(row + 4, col, cat2, format)
+        worksheet.write(row+3, col, str(i) + " lesan", format)
+        worksheet.write(row + 4, col, cat2, format)
 
-    worksheet.write(row+6, col, str(i) + " shefa", format)
-    worksheet.write(row + 7, col, cat3, format)
+        worksheet.write(row+6, col, str(i) + " shefa", format)
+        worksheet.write(row + 7, col, cat3, format)
 
-    worksheet.write(row+9, col, str(i) +" juff",format)
-    worksheet.write(row + 10, col , cat4,format)
+        worksheet.write(row+9, col, str(i) +" juff",format)
+        worksheet.write(row + 10, col , cat4,format)
+    else:
+        worksheet2.write(row, col2, str(i) + " hulk")
+        worksheet2.write(row+1, col2, cat1)
 
+        worksheet2.write(row+3, col2, str(i) + " lesan")
+        worksheet2.write(row + 4, col2, cat2)
+
+        worksheet2.write(row+6, col2, str(i) + " shefa")
+        worksheet2.write(row + 7, col2, cat3)
+
+        worksheet2.write(row+9, col2, str(i) +" juff")
+        worksheet2.write(row + 10, col2 , cat4)
+        col2+=1
     col += 1
     row=3
     # for k, v in od2.items():
@@ -118,5 +133,10 @@ for k in range(1,size+1):
     worksheet.write(row+5, k, avgcat2/size,format)
     worksheet.write(row+8, k, avgcat3/size,format)
     worksheet.write(row+11, k, avgcat4/size,format)
-
+for k in range(1,size+1):
+    worksheet2.write(row+2, k, avgcat1/size)
+    worksheet2.write(row+5, k, avgcat2/size)
+    worksheet2.write(row+8, k, avgcat3/size)
+    worksheet2.write(row+11, k, avgcat4/size)
+workbook2.close()
 workbook.close()

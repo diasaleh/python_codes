@@ -18,13 +18,17 @@ allwords=0
 def createList():
     nsufff={}
     for i in range(1,size):
-        with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_6_'+str(i)+'.txt', "r") as f:
+        with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa/'+(sys.argv[4])+"F2_"+str(i)+'.txt', "r") as f:
             for line in f:
                 x = line.split("&")
-                nsufff[x[0]]=0
+                if len(x) > 2:
+                    if x[1] == "PREP":
+                        nsufff[x[0]]=0
     return nsufff
 workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+(sys.argv[5])+'.xlsx')
 worksheet = workbook.add_worksheet()
+workbook2 = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+(sys.argv[5])+'_2.xlsx')
+worksheet2 = workbook2.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
 format.set_font_color('white')
@@ -39,16 +43,19 @@ NSUFFc=[0]* 1000
 NSUFFall={}
 sentence=""
 col=1
+col2=1
 roww=1
 avgNsuff=0
 m=0
 NSUFFall=createList()
 for i in range(1,size):
     nsuff = createList()
-    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_6_'+str(i)+'.txt', "r") as f:
+    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa/'+(sys.argv[4])+"F2_"+str(i)+'.txt', "r") as f:
         for line in f:
             x = line.split("&")
-            nsuff[x[0]]+=1
+            if len(x) > 2:
+                if x[1] == "PREP":
+                    nsuff[x[0]]+=1
     allPron = sum(nsuff.values())
     # nsuff.append("+ا")
     # nsuff.append("+ان")
@@ -65,13 +72,22 @@ for i in range(1,size):
     #     worksheet.write(roww + 1, col, 0, format)
     #     worksheet.write(roww + 2, col,0, format)
     #     roww+=4
-
-    for key in sorted(nsuff):
-        worksheet.write(roww, col, str(i) +" & " +key+ " & "+str(words[i]) , format2)
-        worksheet.write(roww + 1, col, nsuff[key], format)      
-        worksheet.write(roww + 2, col, 100*nsuff[key]/allPron, format)
-        NSUFFall[key] +=100*nsuff[key]/ allPron
-        roww +=4
+    if i < 16000:
+        for key in sorted(nsuff):
+            worksheet.write(roww, col, str(i) +" & " +key+ " & "+str(words[i]) , format2)
+            worksheet.write(roww + 1, col, nsuff[key], format)      
+            worksheet.write(roww + 2, col, 100*nsuff[key]/allPron, format)
+            NSUFFall[key] +=100*nsuff[key]/ allPron
+            roww +=4
+    else:
+            
+        for key in sorted(nsuff):
+            worksheet2.write(roww, col2, str(i) +" & " +key+ " & "+str(words[i]))
+            worksheet2.write(roww + 1, col2, nsuff[key])      
+            worksheet2.write(roww + 2, col2, 100*nsuff[key]/allPron)
+            NSUFFall[key] +=100*nsuff[key]/ allPron
+            roww +=4
+        col2+=1    
     roww = 1
     col +=1
     nsuff= {}
@@ -83,5 +99,10 @@ for key in sorted(NSUFFall):
     for x in range(1,101):
         worksheet.write(roww, x ,NSUFFall[key]/size, format)
     roww+=4    
-
+roww =  4
+for key in sorted(NSUFFall):
+    for x in range(1,101):
+        worksheet2.write(roww, x ,NSUFFall[key]/size)
+    roww+=4  
 workbook.close()
+workbook2.close()

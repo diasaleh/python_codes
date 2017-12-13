@@ -19,17 +19,21 @@ allwords=0
 def createList():
     nsufff={}
     for i in range(1,size):
-        with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_6_'+str(i)+'.txt', "r") as f:
+        with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa/'+(sys.argv[4])+"F2_"+str(i)+'.txt', "r") as f:
             for line in f:
                 x = line.split("&")
-                if("+" in x[0]):
-                    conn[x[0]]=0
-                else:
-                    notconn[x[0]]=0
+                if len(x) > 2:
+                    if x[1] == "PRON":
+                        if("+" in x[0]):
+                            conn[x[0]]=0
+                        else:
+                            notconn[x[0]]=0
     return conn,notconn
 workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+(sys.argv[5])+'.xlsx')
 worksheet = workbook.add_worksheet()
-format = workbook.add_format()
+workbook2 = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/'+(sys.argv[4])+(sys.argv[5])+'_2.xlsx')
+worksheet2 = workbook2.add_worksheet()
+format = workbook2.add_format()
 format.set_bold()
 format.set_font_color('white')
 format.set_bg_color('green')
@@ -43,6 +47,7 @@ notconnallc=0
 connallc=0
 sentence=""
 col=1
+col2=1
 roww=1
 avgNsuff=0
 connc=0
@@ -51,13 +56,15 @@ m=0
 connall,notconnall=createList()
 for i in range(1,size):
     conn,notconn = createList()
-    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa_details/Farasa_POS_Type_6_'+str(i)+'.txt', "r") as f:
+    with open('/Users/diasaleh/Desktop/'+(sys.argv[4])+'_shell_output/Farasa/'+(sys.argv[4])+"F2_"+str(i)+'.txt', "r") as f:
         for line in f:
             x = line.split("&")
-            if("+" in x[0]):
-                conn[x[0]]+=1
-            else:
-                notconn[x[0]]+=1    
+            if len(x) > 2:
+                if x[1] == "PRON":
+                    if("+" in x[0]):
+                        conn[x[0]]+=1
+                    else:
+                        notconn[x[0]]+=1    
     ff = open(sys.argv[1]+"/"+sys.argv[2]+str(i)+".txt", "r")
     sentence = ff.read()
     sentence = unicode(sentence, "utf-8")
@@ -88,15 +95,23 @@ for i in range(1,size):
         print key.decode("utf-8")
     for key in notconn.keys():
         print key.decode("utf-8")    
-    
-    worksheet.write(roww, col, str(i) +" & " +"conn"+ " & "+str(words[i]) , format2)
-    worksheet.write(roww + 1, col,connc , format)      
-    worksheet.write(roww + 2, col, 100*connc / (connc + notconnc), format)
-    roww+=4
-    worksheet.write(roww, col, str(i) +" & " +"conn"+ " & "+str(words[i]) , format2)
-    worksheet.write(roww + 1, col,notconnc, format)      
-    worksheet.write(roww + 2, col, 100*notconnc / (connc + notconnc), format)
-
+    if i < 16000:
+        worksheet.write(roww, col, str(i) +" & " +"conn"+ " & "+str(words[i]) , format2)
+        worksheet.write(roww + 1, col,connc , format)      
+        worksheet.write(roww + 2, col, 100*connc / (connc + notconnc), format)
+        roww+=4
+        worksheet.write(roww, col, str(i) +" & " +"conn"+ " & "+str(words[i]) , format2)
+        worksheet.write(roww + 1, col,notconnc, format)      
+        worksheet.write(roww + 2, col, 100*notconnc / (connc + notconnc), format)
+    else:
+        worksheet2.write(roww, col2, str(i) +" & " +"conn"+ " & "+str(words[i]))
+        worksheet2.write(roww + 1, col2,connc )      
+        worksheet2.write(roww + 2, col2, 100*connc / (connc + notconnc))
+        roww+=4
+        worksheet2.write(roww, col2, str(i) +" & " +"conn"+ " & "+str(words[i]) )
+        worksheet2.write(roww + 1, col2,notconnc)      
+        worksheet2.write(roww + 2, col2, 100*notconnc / (connc + notconnc))  
+        col2+=1
     connallc +=100*connc / (connc + notconnc)
     notconnallc +=100*notconnc / (connc + notconnc)
     roww = 1
@@ -114,5 +129,12 @@ for x in range(1,101):
 roww+=4
 for x in range(1,101):
     worksheet.write(roww, x ,notconnallc/size, format)
+roww =  4
+for x in range(1,101):
+    worksheet2.write(roww, x ,connallc/size)
+roww+=4
+for x in range(1,101):
+    worksheet2.write(roww, x ,notconnallc/size)
 
 workbook.close()
+workbook2.close()

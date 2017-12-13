@@ -22,11 +22,11 @@ x6_1000=np.array([9.673794018 ,10.49013918 ,11.63024286 ,7.949352456 ,7.92667974
 
 x100=np.dstack((x1_100,x2_100,x3_100,x4_100,x5_100,x6_100)).reshape(-1,num_ft)
 x1000=np.dstack((x1_1000,x2_1000,x3_1000,x4_1000,x5_1000,x6_1000)).reshape(-1,num_ft)
-x100test=x100[-10:]
-x1000test=x1000[-10:]
-x100=x100[:10]
-x1000=x1000[:10]
-
+x100test=x100[:10]
+x1000test=x1000[:10]
+x100=x100[10:]
+x1000=x1000[10:]
+print len(x100test)
 X=np.concatenate((x100,x1000),axis=0)
 y100 = np.repeat(100,len(x100))
 y1000=np.repeat(1000,len(x1000))
@@ -34,6 +34,9 @@ Y=np.concatenate((y100,y1000),axis=0)
 
 #X = np.array([[-1, -1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])
 
+print x100
+print "=============="
+print x100test
 
 from sklearn.naive_bayes import GaussianNB
 clf = GaussianNB()
@@ -43,3 +46,4 @@ print(x100test)
 print(clf.predict(x100test))
 print(x1000test)
 print(clf.predict(x1000test))
+

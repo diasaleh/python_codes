@@ -8,7 +8,7 @@ import sys
 row = 3
 row2 = 3
 col = 1
-col2 = 3
+col2 = 1
 j=0
 size=int(sys.argv[3])+1
 import collections
@@ -16,6 +16,8 @@ avgcat1=0
 avgcat2=0
 workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'all_entifakh_details.xlsx')
 worksheet = workbook.add_worksheet()
+workbook2 = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'all_entifakh_details_2.xlsx')
+worksheet2 = workbook2.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
 format.set_font_color('white')
@@ -64,14 +66,25 @@ for i in range(1,size):
     print "\nentifakh: " + str(cat1)
     # print "\nleen: " + str(cat2)
     print "\n=============\n"
-    worksheet.write(row, col, str(i) + " entifakh",format)
-    worksheet.write(row+1, col, cat1,format)
+    if i<16000:
+        worksheet.write(row, col, str(i) + " entifakh",format)
+        worksheet.write(row+1, col, cat1,format)
 
-    print cat3
+        print cat3
 
-    # worksheet.write(row+3, col, str(i) +" leen",format)
-    # worksheet.write(row + 4, col , cat2,format)
-    worksheet.write(row+6, col, cat3,format)
+        # worksheet.write(row+3, col, str(i) +" leen",format)
+        # worksheet.write(row + 4, col , cat2,format)
+        worksheet.write(row+6, col, cat3,format)
+    else:
+        worksheet2.write(row, col2, str(i) + " entifakh")
+        worksheet2.write(row+1, col2, cat1)
+
+        print cat3
+
+        # worksheet.write(row+3, col, str(i) +" leen",format)
+        # worksheet.write(row + 4, col , cat2,format)
+        worksheet2.write(row+6, col2, cat3)
+        col2+=1    
     col += 1
     row=3
     # for k, v in od2.items():
@@ -86,5 +99,9 @@ size = size-1
 for k in range(0,size+1):
     worksheet.write(5, k, avgcat1/size,format)
     worksheet.write(8, k, avgcat2/size,format)
+for k in range(0,size+1):
+    worksheet2.write(5, k, avgcat1/size)
+    worksheet2.write(8, k, avgcat2/size)
 
 workbook.close()
+workbook2.close()

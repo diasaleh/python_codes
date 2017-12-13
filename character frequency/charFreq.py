@@ -6,13 +6,15 @@ import collections
 row = 3
 row2 = 3
 col = 1
-col2 = 3
+col2 = 1
 j=0
 size=int(sys.argv[3])+1
 avgcat1=0
 avgcat2=0
 workbook = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'RowCharFeq.xlsx')
 worksheet = workbook.add_worksheet()
+workbook2 = xlsxwriter.Workbook('/Users/diasaleh/Desktop/'+str(sys.argv[4])+'_shell_output/'+str(sys.argv[4])+'RowCharFeq_2.xlsx')
+worksheet2 = workbook2.add_worksheet()
 format = workbook.add_format()
 format.set_bold()
 format.set_font_color('white')
@@ -45,15 +47,20 @@ for i in range(1,size):
 
 
     worksheet.write(row, col, str(i) + "",format)
-    a1_sorted_keys = sorted(a1, key=a1.get, reverse=True)
-    for r in a1_sorted_keys:
+    # a1_sorted_keys = sorted(a1, key=a1.get)
+    for r in sorted(a1):
         print r, a1[r]        
         #print "%s : %d" % (k,v)
         sentence = unicode(r, "utf-8")
-        worksheet.write(row+1, col, sentence,format)
-        worksheet.write(row+1, col+1, float((a1[r] * 100) / (n * 1.0)),format)
+        if i<16000:
+            worksheet.write(row+1, col, sentence,format)
+            worksheet.write(row+1, col+1, float((a1[r] * 100) / (n * 1.0)),format)
+        else:
+            worksheet2.write(row+1, col2, sentence)
+            worksheet2.write(row+1, col2+1, float((a1[r] * 100) / (n * 1.0)))
+            col2 = col2+2
         row+=1
-
+        
         print i
         print float((a1[r] * 100) / (n * 1.0))
         print "\n=============\n"
@@ -71,3 +78,4 @@ for i in range(1,size):
 
 
 workbook.close()
+workbook2.close()

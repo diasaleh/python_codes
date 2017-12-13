@@ -27,11 +27,11 @@ digit_list = '٠١٢٣٤٥٦٧٨٩'
 regexx = ur'[\u0660-\u0669]+'
 subst = u" "
 t=""
-for i in range(1,477):
+for i in range(1,11873):
 	print i
-	f=open("/Users/diasaleh/Desktop/without/T"+str(i)+".txt","r")
+	f=open("/Users/diasaleh/Desktop/blogs/tb ("+str(i)+").txt","r")
 	text = f.read()
-	text = text.decode('cp1256')
+	text = text.decode('utf-8')
 	text = regex.sub(ur'[\p{Latin}]', u' ', text)
 	text =re.sub('[A-Za-z0-9]+', ' ', text)
 	text = re.sub(r'[?|$|.|!]',r' ',text)
@@ -41,13 +41,14 @@ for i in range(1,477):
 	text = text.replace("ـ".decode("utf-8"), " ");
 	text = text.replace("؛".decode("utf-8"), " ");
 	text = text.replace(" ".decode("utf-8"), " ");
+	text = text.replace("٪".decode("utf-8"), " ");
 	
 	text = re.sub(regexx, subst, text)
 
 	text = re.sub(' +',' ',text)
 	t+=text
 	text = text.encode('utf-8')
-	out = open("/Users/diasaleh/Desktop/courpos/ForShell/1400/TN"+str(i)+".txt","w")
+	out = open("/Users/diasaleh/Desktop/courpos/ForShell/blogs/TN"+str(i)+".txt","w")
 	out.write(text)
 	out.close()
 letters = collections.Counter(t)
